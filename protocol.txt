@@ -1,0 +1,85 @@
+                         Simple Comet Protocol
+
+   Rev. 1.0
+
+1. Introduction
+
+  1.1. Purpose
+
+   The primary purpose of this protocol is to enable a method of long-polling,
+   transparent to the web client, where client connections idle only on the
+   local HTTP server or a remote server.
+
+  1.2. Requirements
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC2119. An
+   implementation is not compliant if it fails to satisfy one or more of
+   the MUST or REQUIRED level requirements for the protocols it
+   implements.
+
+   An implementation that satisfies all the MUST or REQUIRED level and all
+   the SHOULD level requirements for its protocols is said to be
+   "unconditionally compliant"; one that satisfies all the MUST level
+   requirements but not all the SHOULD level requirements for its
+   protocols is said to be "conditionally compliant."
+
+  1.3. Terminology
+
+   This specification uses a number of terms to refer to the roles played
+   by participants in, and objects of, this protocol:
+
+   server
+          The HTTP server implementing this protocol.
+
+   client
+          A program that initiates TCP/IP connections with the HTTP server
+          for the purpose of sending HTTP requests.
+
+   message
+          Application specific data that is relayed from a publisher to a
+          subscriber.
+
+   time
+          Time specified only by the server.
+
+   channel
+          An isolated channel of communication which handle a message queue.
+
+   channel id
+          A unique identifier for a channel.
+
+   query string
+          A set of parameters send to the server.
+
+2. Requirements
+
+  2.1. Server Requirements
+
+   The HTTP server MUST have a mechanism of specifying a query string. Each
+   request to the server MUST have a query string which contains parameters as
+   the table shows it. The client The response MUST be a json string. The
+   server MAY handle a callback parameter to allow JSONP requests.
+
+  2.2. Client requests
+
+   Sending a message :
+    * method = 'put' (REQUIRED)
+    * channel = channel id (REQUIRED)
+    * message = message (REQUIRED)
+    * callback = jsonp function (OPTIONAL)
+    Returns immediately the time of the message sended
+
+   Receiving messages :
+    * method = 'get' (REQUIRED)
+    * channel = channel id (REQUIRED)
+    * callback = jsonp function (OPTIONAL)
+    Returns the time of the message sended and a list of messages when a new 
+    message is coming or after a timeout.
+
+   Synchronizing time :
+    * method = 'sync' (REQUIRED)
+    * channel = channel id (REQUIRED)
+    * callback = jsonp function (OPTIONAL)
+    Returns immediately the time of the message sended
