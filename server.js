@@ -6,7 +6,7 @@ var url = require("url");
 // Configuration
 // -------------------------------------
 
-var port = 8080;
+var port = 443;
 var timeout = 5000; //ms
 var bufferSize = 10;
 
@@ -167,15 +167,15 @@ function response(res, code, body, callback)
         "Content-Type": type,
         "Content-Length": body.length
     });
-    res.sendBody(body);
-    res.finish();
+    res.write(body);
+    res.close();
     log('client--');
 }
 
 var server = createServer(function (req, res) {
     log('client++');
     var query   = url.parse(req.url, true).query || {method:'sync', channel:1},
-        channel = parseInt(query.channel, 10) || 1,
+        channel = query.channel || 'test',
         method  = query.method || 'sync',
         buffer  = getBuffer(channel),
         callback= query.callback || false,
